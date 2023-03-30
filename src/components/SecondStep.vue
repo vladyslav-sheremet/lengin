@@ -5,7 +5,8 @@ import {getProductsFromLocalStorage} from '@/utils'
 import type {Order, ProductFromLocalStorage} from '@/types'
 
 const emit = defineEmits<{
-  (e: 'order'): void
+  (e: 'order'): void,
+  (e: 'step', id: number): void
 }>()
 
 let order = ref<Order>({} as Order)
@@ -137,6 +138,10 @@ const orderHandler = async () => {
     console.log('imitation of a successful order', order.value)
   }
 }
+
+const stepHandler = () => {
+  emit('step', 1)
+}
 </script>
 
 <template>
@@ -209,7 +214,7 @@ const orderHandler = async () => {
           rounded
           variant="flat"
           width="90"
-          @click="$emit('step', 1)"
+          @click="stepHandler"
       >
         Previous
       </v-btn>

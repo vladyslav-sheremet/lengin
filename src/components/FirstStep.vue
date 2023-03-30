@@ -6,7 +6,8 @@ import type {ProductFromLocalStorage} from '@/types'
 
 let orders = ref<ProductFromLocalStorage[]>([])
 const emit = defineEmits<{
-  (e: 'remove-from-cart'): void
+  (e: 'remove-from-cart'): void,
+  (e: 'step', id: number): void
 }>()
 
 orders.value = getProductsFromLocalStorage()
@@ -17,8 +18,10 @@ const removeFromLocalStorage = (id: number) => {
   orders.value = orders.value.filter((i: ProductFromLocalStorage) => i.id !== id)
   setProductsToLocalStorage(products)
 
-  emit('remove-from-cart');
+  emit('remove-from-cart')
 }
+
+const stepHandler = () => emit('step', 2)
 </script>
 
 <template>
@@ -31,7 +34,7 @@ const removeFromLocalStorage = (id: number) => {
   >
 
     <h2 class="text-h5 mb-6">Products in your cart</h2>
-    <v-list lines="two" v-if="orders.length">
+    <v-list v-if="orders.length">
       <v-list-item
           v-for="order in orders"
           :key="order.title"
@@ -66,6 +69,17 @@ const removeFromLocalStorage = (id: number) => {
     <v-divider class="mb-4"></v-divider>
 
     <div class="text-end">
+<!--      <v-btn-->
+<!--          class="text-none"-->
+<!--          color="success"-->
+<!--          rounded-->
+<!--          variant="flat"-->
+<!--          width="90"-->
+<!--          :disabled="!orders.length"-->
+<!--          @click="$emit('step', 2)"-->
+<!--      >-->
+<!--        Next-->
+<!--      </v-btn>-->
       <v-btn
           class="text-none"
           color="success"
@@ -73,7 +87,7 @@ const removeFromLocalStorage = (id: number) => {
           variant="flat"
           width="90"
           :disabled="!orders.length"
-          @click="$emit('step', 2)"
+          @click="stepHandler"
       >
         Next
       </v-btn>
